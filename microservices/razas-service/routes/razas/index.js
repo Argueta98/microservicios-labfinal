@@ -11,7 +11,7 @@ const directoryPath = path.join(__dirname, csvPath);
 console.log(directoryPath);
 const csvtojson = require('csvtojson');
 
-const LanguageArray = [];
+const RazasArray = [];
 
 csvtojson({
     noheader: true,
@@ -24,7 +24,7 @@ csvtojson({
     for (let items in jsonObject) {
       jsonObject[items]['raza'] = jsonObject[items]['raza'].split(";");
 
-      LanguageArray.push(jsonObject[items]);
+      RazasArray.push(jsonObject[items]);
     }
   });
 
@@ -35,11 +35,45 @@ csvtojson({
     const response = {
       // crea una respuesta con información sobre los libros
       service: "razas",
-      length: LanguageArray.length,
-      data: LanguageArray,
+      length: RazasArray.length,
+      data: RazasArray,
     };
-    logger("Get razas data"); // registra un mensaje en los registros
     return res.json(response); // devuelve la respuesta al cliente
+  }); 
+
+
+  //Buscar raza por id
+  router.get("/:id", (req, res) => {
+    const razaId = req.params.id;
+    const raza = RazasArray.find((raza) => raza.id === razaId);
+    if (!raza) {
+      return res.status(404).json({
+        message: "Raza no encontrada"
+      });
+    }
+    const response = {
+      service: "razas",
+      data: raza
+    };
+
+    return res.json(response);
+  }); 
+
+   //Buscar raza por nombre
+   router.get("/nombre/:name", (req, res) => {
+    const razaName = req.params.name.toLowerCase();
+    const raza = RazasArray.filter((raza) => raza.raza.map(name => name.toLowerCase()).includes(razaName))[0];
+    if (!raza) {
+      return res.status(404).json({
+        message: "Raza no encontrada"
+      });
+    }
+    const response = {
+      service: "razas",
+      data: raza
+    };
+
+    return res.json(response);
   }); 
 
   module.exports = router;

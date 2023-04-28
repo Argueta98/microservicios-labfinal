@@ -1,9 +1,9 @@
 const {Model, DataTypes} = require('sequelize');
 const sequelize = require('../data/config.js');
 
-class Campeonato extends Model{}
+class Premios extends Model{}
 
-Campeonato.init({
+Premios.init({
     id: {
        type: DataTypes.INTEGER,
        primaryKey: true
@@ -35,4 +35,4 @@ Campeonato.init({
     timestamps: false
 })
 
-module.exports = Campeonato;
+module.exports = Premios;
