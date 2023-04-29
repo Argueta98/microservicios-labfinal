@@ -111,6 +111,9 @@ csvtojson({
   });
 
 
+
+  
+
   //Expectativa de vida
   router.get("/expectativa/expectativa-de-vida", (req, res) => {
     const sortedData = RazasArray.sort((a, b) => b.expectativa_de_vida - a.expectativa_de_vida);
@@ -120,6 +123,9 @@ csvtojson({
     };
     res.json(response);
   });
+
+
+
 
 /*
   // Buscar perro y premios por raza
@@ -158,6 +164,32 @@ router.get("/BuscarRaza/:name", async (req, res) => {
     return res.status(500).json({ error: "Error al obtener información del perro y sus premios" });
   }
 }); */
+
+
+//------------------------------------------------------------EJERCICIOS DE EXAMEN FINAL---------------------------------
+
+//EJERCICIO #1 -- Listar las razas donde "tipo" se igual a "xxxxxx" y "acreditado" sea igual a "xxxxxx"
+    router.get("/TipoAcreditado/:tipo/:acreditado", (req, res) => {
+      const tipo = req.params.tipo.toLowerCase();
+      const acreditado = req.params.acreditado.toLowerCase();
+
+      const raza = RazasArray.filter((raza) => raza.tipo.toLowerCase() === tipo && raza.acreditado.toLowerCase() === acreditado);
+
+      if (raza.length === 0) {
+        return res.status(404).json({
+          message: "No se encontraron razas con el tipo  y acreditado especificado.",
+          message: "Escribir primero el tipo y luego acreditado."
+        });
+      }
+    
+      const response = {
+        service: "Razas con tipo y acreditado",
+        cantidad: raza.length,
+        data : raza
+
+      };
+      return res.json(response);
+    });
 
 
   module.exports = router;
