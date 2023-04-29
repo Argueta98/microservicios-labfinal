@@ -115,6 +115,7 @@ router.get("/peso/:min/:max", async (req, res) => {
   const perros = data.filter(perro => perro.peso >= min && perro.peso <= max);
   const response = {
     service: "perros por peso",
+    cantidad : perros.length,
     data: perros,
   };
   return res.json(response);
