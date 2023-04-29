@@ -109,13 +109,18 @@ csvtojson({
     };
     return res.json(response);
   });
-
+/*
   router.get("/acreditado/:valor", async (req, res) => {
     const acreditado = req.params.valor.toLowerCase();
     const razas = RazasArray.filter((raza) => raza.acreditado.toLowerCase() === acreditado);
 
     const perroData = await fetch(`http://perros:3000/api/v2/perros/raza/${razas[0].raza}`);
     const perro = await perroData.json();
+
+   console.log("perro:", perro[0].Id);
+
+    const premiosResponse = await fetch(` http://premios:4000/api/v2/premios/campeonId/${perro[0].Id}`);
+    const premios = await premiosResponse.json();
 
 
     if (razas.length === 0) {
@@ -124,13 +129,45 @@ csvtojson({
       });
     }
     const response = {
-      service: "razas",
+      service: "Razas, Perro y Premios {Acreditado}",
       cantidad: razas.length,
       data: razas,
-      dataPerro : perro
+      dataPerro : perro,
+      dataPremios: premios
+    };
+    return res.json(response);
+  });*/
+
+  router.get("/acreditado/:valor", async (req, res) => {
+    const acreditado = req.params.valor.toLowerCase();
+    const razas = RazasArray.filter(
+      (raza) => raza.acreditado.toLowerCase() === acreditado
+    );
+  
+    const premiosPromises = [];
+  
+    for (const raza of razas) {
+      const perroData = await fetch(
+        `http://perros:3000/api/v2/perros/raza/${raza.raza}`
+      );
+      const perro = await perroData.json();
+      const premiosPromise = fetch(
+        `http://premios:4000/api/v2/premios/campeonId/${perro[0].Id}`
+      ).then((response) => response.json());
+      premiosPromises.push(premiosPromise);
+    }
+  
+    const premios = await Promise.all(premiosPromises);
+  
+    const response = {
+      service: "Razas, Perro y Premios {Acreditado}",
+      cantidad: razas.length,
+      data: razas,
+      dataPremios: premios,
     };
     return res.json(response);
   });
+  
 
 
 
