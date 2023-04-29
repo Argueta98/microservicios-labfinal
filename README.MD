@@ -11,6 +11,11 @@ run microservice:
 or
 `sudo docker-compose up --build`
 
+
+## RESUMEN DE EJERICIOS RESUELTOS
+
+
+
 ## DOCKERFILE
 
 Este es un archivo Dockerfile que describe cómo construir una imagen de contenedor de Docker para una aplicación Node.js.

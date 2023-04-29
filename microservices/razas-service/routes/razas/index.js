@@ -110,6 +110,28 @@ csvtojson({
     return res.json(response);
   });
 
+  router.get("/acreditado/:valor", async (req, res) => {
+    const acreditado = req.params.valor.toLowerCase();
+    const razas = RazasArray.filter((raza) => raza.acreditado.toLowerCase() === acreditado);
+
+    const perroData = await fetch(`http://perros:3000/api/v2/perros/raza/${razas[0].raza}`);
+    const perro = await perroData.json();
+
+
+    if (razas.length === 0) {
+      return res.status(404).json({
+        message: "No se encontraron el acreditado especificado."
+      });
+    }
+    const response = {
+      service: "razas",
+      cantidad: razas.length,
+      data: razas,
+      dataPerro : perro
+    };
+    return res.json(response);
+  });
+
 
 
   
