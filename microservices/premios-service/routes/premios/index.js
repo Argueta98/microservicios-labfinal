@@ -73,7 +73,7 @@ router.get("/anio/:anio", async(req, res)=>{
     res.send(response);
 })
 
-//Busqueda por anio de campeonato
+//Busqueda por pais de campeonato
 router.get("/pais/:pais", async(req, res)=>{
     const pais = req.params.pais;
     const premios = await premiosData.findAll({where: {pais_competencia: pais}});
@@ -83,6 +83,20 @@ router.get("/pais/:pais", async(req, res)=>{
     }
     res.send(response);
 })
+
+//Busqueda por pais sacando el promedio de premio
+/*
+router.get("/PromedioPais/:pais", async(req, res)=>{
+    const pais = req.params.pais;
+    const premios = await premiosData.findAll({where: {pais_competencia: pais }});
+    const response = {
+       cantidad: premios.length,
+       data:  premios
+    }
+    res.send(response);
+})*/
+
+
 
 //Busqueda por categoria ganada de campeonato
 router.get("/categoria/:categoria", async(req, res)=>{
@@ -109,6 +123,34 @@ router.get("/anios/:inicio/:fin", async(req, res)=>{
 })
 
 
+///-----------------------------------------EJERCICIO 2---------------------------------------------
+//EJERCICIO #2
+//promedio de premios
+router.get("/promedio-pais/:pais", async(req, res)=>{
+    const pais = req.params.pais;
+
+    const premios = await premiosData.findAll({where: {pais_competencia: pais}});
+
+
+    const promedio = await premiosData.findOne({
+        attributes: [
+            [Sequelize.fn('AVG', Sequelize.col('premio')), 'promedio_premio']
+        ],
+        where: {
+            pais_competencia: pais
+        },
+        group: 'pais_competencia'
+    });
+
+    const response = {
+        servicio : "Promedio Premio",
+        data: premios.length,
+        data: premios,
+        promedio: promedio.dataValues.promedio_premio
+    };
+
+    res.json(response);
+});
 
 
 
