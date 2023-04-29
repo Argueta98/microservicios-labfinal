@@ -144,13 +144,36 @@ router.get("/promedio-pais/:pais", async(req, res)=>{
 
     const response = {
         servicio : "Promedio Premio",
-        data: premios.length,
+        cantidad: premios.length,
         data: premios,
         promedio: promedio.dataValues.promedio_premio
     };
 
     res.json(response);
 });
+
+
+//EJERCICIO #3
+//Segun "id devolver la informacion del campeonato y toda la informacion del perro ganador"
+router.get("/campeonato/:id", async(req, res)=>{
+    const idCampeon = req.params.id;
+
+    const premios = await premiosData.findAll({where: {id_campeon: idCampeon}});
+    const perroData = await fetch(`http://perros:3000/api/v2/perros/${premios[0].id_campeon}`);
+    const perro = await perroData.json();
+
+
+    const response = {
+        servicio : "Campeonato y informacion del perro",
+        campeonato: premios,
+        perroData: perro
+
+    };
+
+    res.json(response);
+});
+
+
 
 
 
