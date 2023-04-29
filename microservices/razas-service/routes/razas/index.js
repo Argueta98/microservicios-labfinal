@@ -109,15 +109,14 @@ csvtojson({
     };
     return res.json(response);
   });
-/*
+
+  /*
   router.get("/acreditado/:valor", async (req, res) => {
     const acreditado = req.params.valor.toLowerCase();
     const razas = RazasArray.filter((raza) => raza.acreditado.toLowerCase() === acreditado);
 
     const perroData = await fetch(`http://perros:3000/api/v2/perros/raza/${razas[0].raza}`);
     const perro = await perroData.json();
-
-   console.log("perro:", perro[0].Id);
 
     const premiosResponse = await fetch(` http://premios:4000/api/v2/premios/campeonId/${perro[0].Id}`);
     const premios = await premiosResponse.json();
@@ -151,10 +150,13 @@ csvtojson({
         `http://perros:3000/api/v2/perros/raza/${raza.raza}`
       );
       const perro = await perroData.json();
-      const premiosPromise = fetch(
+
+  
+
+     /* const premiosPromise = fetch(
         `http://premios:4000/api/v2/premios/campeonId/${perro[0].Id}`
       ).then((response) => response.json());
-      premiosPromises.push(premiosPromise);
+      premiosPromises.push(premiosPromise);*/
     }
   
     const premios = await Promise.all(premiosPromises);
@@ -163,7 +165,7 @@ csvtojson({
       service: "Razas, Perro y Premios {Acreditado}",
       cantidad: razas.length,
       data: razas,
-      dataPremios: premios,
+    //  dataPremios: premios,
     };
     return res.json(response);
   });
